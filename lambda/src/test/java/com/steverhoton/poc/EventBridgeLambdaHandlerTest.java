@@ -1,6 +1,7 @@
 package com.steverhoton.poc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.events.ScheduledEvent;
@@ -67,9 +68,4 @@ class EventBridgeLambdaHandlerTest {
     assertEquals("Event processed successfully", result);
   }
 
-  private void assertTrue(boolean condition) {
-    if (!condition) {
-      throw new AssertionError("Expected condition to be true");
-    }
-  }
 }

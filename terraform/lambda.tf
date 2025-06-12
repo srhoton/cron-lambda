@@ -1,6 +1,7 @@
 resource "null_resource" "gradle_build" {
   triggers = {
     source_hash = filemd5("${path.module}/../lambda/src/main/java/com/steverhoton/poc/EventBridgeLambdaHandler.java")
+    build_hash  = filemd5("${path.module}/../lambda/build.gradle")
   }
 
   provisioner "local-exec" {
@@ -28,6 +29,7 @@ resource "aws_lambda_function" "cron_lambda" {
   depends_on = [
     aws_iam_role_policy_attachment.lambda_logs,
     aws_cloudwatch_log_group.lambda_logs,
+    null_resource.gradle_build,
   ]
 }
 
