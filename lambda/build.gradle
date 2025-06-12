@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'com.diffplug.spotless' version '6.23.3'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
+}
+
+group = 'com.steverhoton.poc'
+archivesBaseName = 'cronlambda'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation platform('software.amazon.awssdk:bom:2.21.29')
+    implementation 'software.amazon.awssdk:lambda'
+    implementation 'com.amazonaws:aws-lambda-java-core:1.2.3'
+    implementation 'com.amazonaws:aws-lambda-java-events:3.11.3'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.0'
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-joda:2.16.0'
+    
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.1'
+    testImplementation 'org.mockito:mockito-core:5.7.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.7.0'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+spotless {
+    java {
+        googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+shadowJar {
+    archiveClassifier.set('')
+    mergeServiceFiles()
+    
+    manifest {
+        attributes(
+            'Main-Class': 'com.steverhoton.poc.EventBridgeLambdaHandler'
+        )
+    }
+}
+
+build.dependsOn shadowJar
